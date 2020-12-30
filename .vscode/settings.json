@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        ".vscode": true,
+        "**/*.meta": true,
+        "Library": true,
+        "Packages": true,
+        "ProjectSettings": true,
+        "Temp": true
+    }
+}
