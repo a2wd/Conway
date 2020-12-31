@@ -21,7 +21,6 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
-        var targetGroup = GameObject.Find("CellsTargetGroup").GetComponent<CinemachineTargetGroup>();
         IsRunning = false;
         int xMax = Width;
         int yMax = Height;
@@ -34,8 +33,6 @@ public class GameController : MonoBehaviour
                 Cell cell = Instantiate<Cell>(CellPrefab, new Vector3(x, y, 0), Quaternion.identity);
                 cell.gameObject.GetComponent<Renderer>().material.SetColor("_Color", CellColours.Dead);
                 cell.GameController = this;
-                targetGroup.AddMember(cell.transform, 1, 3);
-
                 cells[x, y] = cell;
                 allCells.Add(cell);
             }
