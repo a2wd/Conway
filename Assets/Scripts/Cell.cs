@@ -8,7 +8,7 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 {
     public bool IsRunning { get; set; }
 
-    public CellState CellState { get; private set;}
+    public CellState CurrentCellState { get; private set;}
 
     private CellState nextCellState;
 
@@ -16,6 +16,7 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
     public Cell()
     {
+        CurrentCellState = CellState.DEAD;
         neighbouringCells = new List<Cell>();
     }
 
@@ -26,14 +27,14 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
     public void SetNextState()
     {
-        int livingNeighbours = neighbouringCells.Count(cell => cell.CellState == CellState.ALIVE);
+        int livingNeighbours = neighbouringCells.Count(cell => cell.CurrentCellState == CellState.ALIVE);
 
-        if (CellState == CellState.ALIVE && (livingNeighbours == 2 || livingNeighbours == 3))
+        if (CurrentCellState == CellState.ALIVE && (livingNeighbours == 2 || livingNeighbours == 3))
         {
             return;
         }
 
-        if (CellState == CellState.DEAD && livingNeighbours == 3)
+        if (CurrentCellState == CellState.DEAD && livingNeighbours == 3)
         {
             nextCellState = CellState.ALIVE;
             return;
@@ -44,9 +45,9 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
     public void UpdateState()
     {
-        CellState = nextCellState;
+        CurrentCellState = nextCellState;
 
-        Color nextColor = CellState == CellState.ALIVE ? Color.green : Color.red;
+        Color nextColor = CurrentCellState == CellState.ALIVE ? Color.green : Color.red;
         gameObject.GetComponent<Renderer>().material.SetColor("_Color", nextColor);
     }
 
@@ -57,13 +58,15 @@ public class Cell : MonoBehaviour, IPointerClickHandler
             return;
         }
 
-        if (CellState == CellState.DEAD)
+        if (CurrentCellState == CellState.ALIVE)
         {
-            CellState = CellState.ALIVE;
-            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);
+            CurrentCellState = CellState.DEAD;
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
         }
-
-        CellState = CellState.DEAD;
-        gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);        
+        else if (CurrentCellState == CellState.DEAD)
+        {
+            CurrentCellState = CellState.ALIVE;
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);        
+        }
     }
 }
