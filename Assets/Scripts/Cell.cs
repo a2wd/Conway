@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class Cell : MonoBehaviour, IPointerClickHandler
 {
-    public bool IsRunning { get; set; }
+    public GameController GameController { get; set; }
 
     public CellState CurrentCellState { get; private set;}
 
@@ -31,6 +31,7 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
         if (CurrentCellState == CellState.ALIVE && (livingNeighbours == 2 || livingNeighbours == 3))
         {
+            nextCellState = CellState.ALIVE;
             return;
         }
 
@@ -53,9 +54,9 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        if (IsRunning)
+        if (GameController.IsRunning)
         {
-            return;
+            GameController.IsRunning = false;
         }
 
         if (CurrentCellState == CellState.ALIVE)

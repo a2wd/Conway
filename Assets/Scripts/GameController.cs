@@ -11,13 +11,14 @@ public class GameController : MonoBehaviour
 
     private List<Cell> allCells = new List<Cell>();
 
-    private bool isRunning = false;
+    public bool IsRunning { get; set; }
 
     private float deltaTime = 0f;
 
     private void Start()
     {
         var targetGroup = GameObject.Find("CellsTargetGroup").GetComponent<CinemachineTargetGroup>();
+        IsRunning = false;
         int xMax = 10;
         int yMax = 10;
         Cell[,] cells = new Cell[xMax,yMax];
@@ -28,6 +29,7 @@ public class GameController : MonoBehaviour
             {
                 Cell cell = Instantiate<Cell>(CellPrefab, new Vector3(x, y, 0), Quaternion.identity);
                 cell.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                cell.GameController = this;
                 targetGroup.AddMember(cell.transform, 1, 3);
 
                 cells[x, y] = cell;
@@ -55,24 +57,21 @@ public class GameController : MonoBehaviour
 
     private void Update()
     {
-        if (!isRunning && Input.GetButton("Jump"))
+        if (Input.GetButton("Jump"))
         {
-            isRunning = true;
-            allCells.ForEach(cell => cell.IsRunning = true);
+            IsRunning = true;
         }
 
-        if (!isRunning)
+        if (IsRunning)
         {
-            return;
-        }
+            deltaTime += Time.deltaTime;
 
-        deltaTime += Time.deltaTime;
-
-        if (deltaTime > UpdateInterval)
-        {
-            deltaTime = 0f;
-            allCells.ForEach(cell => cell.SetNextState());
-            allCells.ForEach(cell => cell.UpdateState());
+            if (deltaTime > UpdateInterval)
+            {
+                deltaTime = 0f;
+                allCells.ForEach(cell => cell.SetNextState());
+                allCells.ForEach(cell => cell.UpdateState());
+            }
         }
     }
 }
