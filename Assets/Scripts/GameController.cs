@@ -9,6 +9,10 @@ public class GameController : MonoBehaviour
 
     public float UpdateInterval;
 
+    public int Width;
+
+    public int Height;
+
     private List<Cell> allCells = new List<Cell>();
 
     public bool IsRunning { get; set; }
@@ -19,8 +23,8 @@ public class GameController : MonoBehaviour
     {
         var targetGroup = GameObject.Find("CellsTargetGroup").GetComponent<CinemachineTargetGroup>();
         IsRunning = false;
-        int xMax = 10;
-        int yMax = 10;
+        int xMax = Width;
+        int yMax = Height;
         Cell[,] cells = new Cell[xMax,yMax];
 
         for (int x = 0; x < xMax; x++)
