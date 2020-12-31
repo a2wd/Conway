@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
             for (int y = 0; y < yMax; y++)
             {
                 Cell cell = Instantiate<Cell>(CellPrefab, new Vector3(x, y, 0), Quaternion.identity);
-                cell.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                cell.gameObject.GetComponent<Renderer>().material.SetColor("_Color", CellColours.Dead);
                 cell.GameController = this;
                 targetGroup.AddMember(cell.transform, 1, 3);
 

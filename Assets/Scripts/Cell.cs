@@ -48,7 +48,7 @@ public class Cell : MonoBehaviour, IPointerClickHandler
     {
         CurrentCellState = nextCellState;
 
-        Color nextColor = CurrentCellState == CellState.ALIVE ? Color.green : Color.red;
+        Color nextColor = CurrentCellState == CellState.ALIVE ? CellColours.Alive : CellColours.Dead;
         gameObject.GetComponent<Renderer>().material.SetColor("_Color", nextColor);
     }
 
@@ -62,12 +62,12 @@ public class Cell : MonoBehaviour, IPointerClickHandler
         if (CurrentCellState == CellState.ALIVE)
         {
             CurrentCellState = CellState.DEAD;
-            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", CellColours.Dead);
         }
         else if (CurrentCellState == CellState.DEAD)
         {
             CurrentCellState = CellState.ALIVE;
-            gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.green);        
+            gameObject.GetComponent<Renderer>().material.SetColor("_Color", CellColours.Alive);
         }
     }
 }
