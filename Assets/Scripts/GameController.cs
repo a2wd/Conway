@@ -1,18 +1,78 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public Cell CellPrefab;
+
+    public float UpdateInterval;
+
+    private List<Cell> allCells = new List<Cell>();
+
+    private bool isRunning = false;
+
+    private float deltaTime = 0f;
+
+    private void Start()
     {
-        
+        var targetGroup = GameObject.Find("CellsTargetGroup").GetComponent<CinemachineTargetGroup>();
+        int xMax = 10;
+        int yMax = 10;
+        Cell[,] cells = new Cell[xMax,yMax];
+
+        for (int x = 0; x < xMax; x++)
+        {
+            for (int y = 0; y < yMax; y++)
+            {
+                Cell cell = Instantiate<Cell>(CellPrefab, new Vector3(x, y, 0), Quaternion.identity);
+                cell.gameObject.GetComponent<Renderer>().material.SetColor("_Color", Color.red);
+                targetGroup.AddMember(cell.transform, 1, 3);
+
+                cells[x, y] = cell;
+                allCells.Add(cell);
+            }
+        }
+
+        for (int x = 0; x < xMax; x++)
+        {
+            for (int y = 0; y < yMax; y++)
+            {
+                Cell cell = cells[x, y];
+                cell.AddNeighbour(cells[(x + xMax - 1) % xMax, (y + yMax - 1) % yMax]);
+                cell.AddNeighbour(cells[x, (y + yMax - 1) % yMax]);
+                cell.AddNeighbour(cells[(x + 1) % xMax, (y + yMax - 1) % yMax]);
+                cell.AddNeighbour(cells[(x + xMax - 1) % xMax, y]);
+                cell.AddNeighbour(cells[(x + 1) % xMax, y]);
+                cell.AddNeighbour(cells[(x + xMax - 1) % xMax, (y + 1) % yMax]);
+                cell.AddNeighbour(cells[x, (y + 1) % yMax]);
+                cell.AddNeighbour(cells[(x + 1) % xMax, (y + 1) % yMax]);
+
+            }
+        }        
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (!isRunning && Input.GetButton("Jump"))
+        {
+            isRunning = true;
+            allCells.ForEach(cell => cell.IsRunning = true);
+        }
+
+        if (!isRunning)
+        {
+            return;
+        }
+
+        deltaTime += Time.deltaTime;
+
+        if (deltaTime > UpdateInterval)
+        {
+            deltaTime = 0f;
+            allCells.ForEach(cell => cell.SetNextState());
+            allCells.ForEach(cell => cell.UpdateState());
+        }
     }
 }
