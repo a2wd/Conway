@@ -453,6 +453,8 @@ MonoBehaviour:
   CellPrefab: {fileID: 1488357820783803967, guid: 4c368429499ca49428f56ab508080f11,
     type: 3}
   UpdateInterval: 1
+  Width: 20
+  Height: 20
 --- !u!4 &611811384
 Transform:
   m_ObjectHideFlags: 0
