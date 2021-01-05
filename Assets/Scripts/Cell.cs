@@ -1,10 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Cell : MonoBehaviour, IPointerClickHandler
+public class Cell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public GameController GameController { get; set; }
 
@@ -14,10 +14,24 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
     private List<Cell> neighbouringCells;
 
-    public Cell()
+    private Behaviour halo;
+
+    private Renderer objectRenderer;
+
+    private void Awake()
     {
         CurrentCellState = CellState.DEAD;
         neighbouringCells = new List<Cell>();
+
+        halo = (Behaviour) GetComponent("Halo");
+        objectRenderer = gameObject.GetComponent<Renderer>();
+    }
+
+    private void UpdateHaloColour(Color color)
+    {
+        SerializedObject serializedHalo = new SerializedObject(halo);
+        serializedHalo.FindProperty("m_Color").colorValue = color;
+        serializedHalo.ApplyModifiedProperties();
     }
 
     public void AddNeighbour(Cell cell)
@@ -49,7 +63,7 @@ public class Cell : MonoBehaviour, IPointerClickHandler
         CurrentCellState = nextCellState;
 
         Color nextColor = CurrentCellState == CellState.ALIVE ? CellColours.Alive : CellColours.Dead;
-        gameObject.GetComponent<Renderer>().material.SetColor("_Color", nextColor);
+        objectRenderer.material.SetColor("_Color", nextColor);
     }
 
     public void OnPointerClick(PointerEventData pointerEventData)
@@ -61,13 +75,25 @@ public class Cell : MonoBehaviour, IPointerClickHandler
 
         if (CurrentCellState == CellState.ALIVE)
         {
+            UpdateHaloColour(CellColours.Dead);
             CurrentCellState = CellState.DEAD;
-            gameObject.GetComponent<Renderer>().material.SetColor("_Color", CellColours.Dead);
+            objectRenderer.material.SetColor("_Color", CellColours.Dead);
         }
         else if (CurrentCellState == CellState.DEAD)
         {
+            UpdateHaloColour(CellColours.Alive);
             CurrentCellState = CellState.ALIVE;
-            gameObject.GetComponent<Renderer>().material.SetColor("_Color", CellColours.Alive);
+            objectRenderer.material.SetColor("_Color", CellColours.Alive);
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        halo.enabled = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        halo.enabled = false;
     }
 }

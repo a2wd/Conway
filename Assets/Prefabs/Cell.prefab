@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 740693372685646840}
   - component: {fileID: 5508467398663568910}
   - component: {fileID: 1488357820783803967}
+  - component: {fileID: 350694595950198675}
   m_Layer: 0
   m_Name: Cell
   m_TagString: Untagged
@@ -106,3 +107,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 016e0edb6e1513d42a0fcf111b2121cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!122 &350694595950198675
+Halo:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6444197185897663289}
+  m_Enabled: 0
+  m_Color:
+    serializedVersion: 2
+    rgba: 4294967295
+  m_Size: 0.6
