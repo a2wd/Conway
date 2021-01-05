@@ -51,7 +51,6 @@ public class GameController : MonoBehaviour
                 cell.AddNeighbour(cells[(x + xMax - 1) % xMax, (y + 1) % yMax]);
                 cell.AddNeighbour(cells[x, (y + 1) % yMax]);
                 cell.AddNeighbour(cells[(x + 1) % xMax, (y + 1) % yMax]);
-
             }
         }        
     }
@@ -60,7 +59,7 @@ public class GameController : MonoBehaviour
     {
         if (Input.GetButton("Jump"))
         {
-            IsRunning = true;
+            IsRunning = !IsRunning;
         }
 
         if (IsRunning)
