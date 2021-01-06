@@ -68,11 +68,6 @@ public class Cell : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, I
 
     public void OnPointerClick(PointerEventData pointerEventData)
     {
-        if (GameController.IsRunning)
-        {
-            GameController.IsRunning = false;
-        }
-
         if (CurrentCellState == CellState.ALIVE)
         {
             UpdateHaloColour(CellColours.Dead);
